@@ -1,7 +1,7 @@
 ##Poker-Game-Project
 
 
->This is a C# project Pokerhands.
+>This is a C# project for Poker hands game.
 
 >To run
 
