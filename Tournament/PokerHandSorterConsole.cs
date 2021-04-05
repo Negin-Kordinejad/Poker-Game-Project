@@ -12,16 +12,17 @@ namespace Tournament
 {
     public class PokerHandSorterConsole : IPokerHandSorter
     {
-        DealCarts _dealcarts;
-
-        TournamentModel tournament;
+         
+        IDealCarts _dealcarts;
+        TournamentModel _tournament;
+        ILogger _logger;
         public PokerHandSorterConsole()
         {
+            //Todo:Add DI 
             _dealcarts = new DealCarts();
         }
         public void StartTournament()
         {
-            Console.WriteLine("-----Start Tournament------");
 
             List<Player> players = new List<Player>
             {
@@ -29,27 +30,46 @@ namespace Tournament
                 new Player { Name = "Player2", WinerHands = 0 }
             };
 
-            tournament = new TournamentModel(players);
+            _tournament = new TournamentModel(players);
 
             //=============== Console Game ================
 
             string hand = "";
-            do
+            Tuple<string, int> TResult;
+            try
             {
-                Console.WriteLine("Play:");
-                hand = Console.ReadLine();
-                if (hand.Length == 1)
-                    break;
-                Tuple<string, int> TResult = _dealcarts.Deal("Player1", "Player2", hand);
+                do
+                {
+                    Console.WriteLine("Play:");
 
-                tournament.Players.Find(p =>
-                p.Name == TResult.Item1).WinerHands = TResult.Item2;
+                    hand = Console.ReadLine();
 
-            } while (1 == 1);
-        
-            Console.WriteLine(tournament.ShowResult());
+                  //To Do:check the format in user inerface teir. 
+                    if (hand.Length == 1 && hand.ToUpper().Contains("X"))
+                        break;
+
+                    TResult = _dealcarts.Deal("Player1", "Player2", hand);
+
+                    _tournament.Players.Find(p =>
+                    p.Name == TResult.Item1).WinerHands = TResult.Item2;
+
+                } while (1 == 1);
+
+                //Need to change
+                if (hand.Length == 19)
+                {
+                    Console.WriteLine(_tournament.ShowResult());
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Please check the hand format.");
+                _logger.LogException(e, "");
+            }
             Console.ReadKey();
         }
-      
+
+    
+
     }
 }

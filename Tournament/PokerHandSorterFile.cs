@@ -7,13 +7,15 @@ using System.Text;
 using System.Threading.Tasks;
 using Tournament.Model;
 
+
+
 namespace Tournament
 {
     public class PokerHandSorterFile : IPokerHandSorter
     {
         DealCarts _dealcarts;
-
-        TournamentModel tournament;
+        TournamentModel _tournament;
+        ILogger _logger;
         public PokerHandSorterFile()
         {
             _dealcarts = new DealCarts();
@@ -28,10 +30,8 @@ namespace Tournament
                 new Player { Name = "Player2", WinerHands = 0 }
             };
 
-            tournament = new TournamentModel(players);
+            _tournament = new TournamentModel(players);
 
-
-            //============ Games From File  ==============
             try
             {
                 IEnumerable<string> handList = File.ReadLines(@"C:\Argent\poker-hands.txt");
@@ -40,28 +40,25 @@ namespace Tournament
                 {
                     Tuple<string, int> TResult = _dealcarts.Deal("Player1", "Player2", h);
 
-                    tournament.Players.Find(p =>
+                    _tournament.Players.Find(p =>
                     p.Name == TResult.Item1).WinerHands = TResult.Item2;
 
                 });
+
+                Console.WriteLine(_tournament.ShowResult());
             }
             catch (FileNotFoundException e)
             {
                 Console.WriteLine("problem in input file.");
-                Log(e.Message);
+                _logger.LogException(e, "");
             }
             catch (Exception e)
             {
                 Console.WriteLine("Please check the hand format.");
-                Log(e.Message);
+                _logger.LogException(e, "");
             }
-            Console.WriteLine(tournament.ShowResult());
-            Console.ReadKey();
-        }
 
-        private void Log(string message)
-        {
-            throw new NotImplementedException();
+            Console.ReadKey();
         }
     }
 }

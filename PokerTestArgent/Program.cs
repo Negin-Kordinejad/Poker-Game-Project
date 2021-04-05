@@ -16,6 +16,8 @@ namespace PokerTestArgent
         /// </summary>
         static void Main(string[] args)
         {
+            Console.WriteLine("----- Start Tournament-----");
+
             //Console Game 
             IPokerHandSorter TC = new PokerHandSorterConsole();
             TC.StartTournament();

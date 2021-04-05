@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ILogger.cs" />
     <Compile Include="IPokerHandSorter.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\TournamentModel.cs" />

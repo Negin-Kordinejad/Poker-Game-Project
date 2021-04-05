@@ -8,6 +8,9 @@ using static PokerDomainModel.Contract.ContractValues;
 
 namespace PokerDomain
 {
+    /// <summary>
+    /// Bussiness model to evaluate a poker hand
+    /// </summary>
     public class PokerHandTypeProssessor
     {
         private List<Card> _cards;
@@ -92,7 +95,6 @@ namespace PokerDomain
 
                         case PokerHandType.Pair:
                             _handValue.HighCard = _cards.GroupBy(c => c.Value).Where(g => g.Count() == 1).Max(c => (int)c.Key);
-                            //_cards.IndexOf(T)==4?(int) _cards.ElementAt(2).Value:(int) _cards.ElementAt(4).Value;
                             _handValue.Total = (int)(_cards.GroupBy(c => c.Value).Where(g => g.Count() == 2).First().Key);
                             _handValue.Type = PokerHandType.Pair;
                             return;

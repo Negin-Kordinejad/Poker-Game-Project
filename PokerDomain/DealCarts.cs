@@ -6,7 +6,7 @@ using static PokerDomainModel.Contract.ContractValues;
 
 namespace PokerDomain
 {
-    public class DealCarts
+    public class DealCarts : IDealCarts
     {
         private Hand player1Hand;
         private Hand player2Hand;
@@ -17,8 +17,10 @@ namespace PokerDomain
         {
 
         }
+
         public Tuple<string, int> Deal(string Player1Name, string Player2Name, string playersHands)
         {
+            //To Do :Need to refactor with DI
             sortedPlayer1Hand = new Hand();
             sortedPlayer2Hand = new Hand();
             HandInit(playersHands);
@@ -46,6 +48,7 @@ namespace PokerDomain
                 {
                     return Tuple.Create(Player2Name, 1);
                 }
+                //if the values are the same, evaluate the highCard
                 else if (_handProcceor1.HandValue.HighCard > _handProcceor2.HandValue.HighCard)
                 {
                     return Tuple.Create(Player1Name, 1);
@@ -56,6 +59,8 @@ namespace PokerDomain
                 }
                 else
                 {
+                    //if the highcards are the same, evaluate the next highCard
+                    // To Do : nedd to make it recersive
                     int NextHighCard1 = GetNextCard(_handProcceor1.HandValue.HighCard, sortedPlayer1Hand.GetHand);
                     int NextHighCard2 = GetNextCard(_handProcceor2.HandValue.HighCard, sortedPlayer2Hand.GetHand);
                     int i = 3;
@@ -88,6 +93,10 @@ namespace PokerDomain
             });
             return h;
         }
+        /// <summary>
+        /// Make the data models with transfering data from input string format 
+        /// </summary>
+        /// <param name="Inithands"></param>
         public void HandInit(string Inithands)
         {
             var HandP = Inithands.Split(new char[0]).ToList();
